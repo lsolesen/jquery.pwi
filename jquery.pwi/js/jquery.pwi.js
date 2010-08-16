@@ -3,9 +3,9 @@
  * This library was inspired aon pwa by Dieter Raber
  * @name jquery.pwi.js
  * @author Jeroen Diderik - http://www.jdee.nl/
- * @revision 1.2.0
- * @date January 25, 2010
- * @copyright (c) 2009 Jeroen Diderik(www.jdee.nl)
+ * @revision 1.3.0
+ * @date august 16, 2010
+ * @copyright (c) 2010 Jeroen Diderik(www.jdee.nl)
  * @license Creative Commons Attribution-Share Alike 3.0 Netherlands License - http://creativecommons.org/licenses/by-sa/3.0/nl/
  * @Visit http://pwi.googlecode.com/ for more informations, duscussions etc about this library
  */
@@ -331,12 +331,7 @@
                 album(settings.photostore[settings.album]);
             } else {
                 var $si = ((settings.page - 1) * settings.maxResults) + 1;
-                var $u = "";
-                if (settings.mode === 'keyword') {
-                   $u = 'http://picasaweb.google.com/data/feed/api/user/' + settings.username + ((settings.album !== "") ? '/album/' + settings.album : '') + '?alt=json&kind=photo&tag=' + settings.keyword + '&max-results=' + settings.maxResults + '&start-index=' + $si + ((settings.authKey !== "") ? "&authkey=" + settings.authKey : "");
-                } else {
-                   $u = 'http://picasaweb.google.com/data/feed/api/user/' + settings.username + '/album/' + settings.album + '?kind=photo&alt=json' + ((settings.authKey !== "") ? "&authkey=" + settings.authKey : "");
-                }
+                var $u = 'http://picasaweb.google.com/data/feed/api/user/' + settings.username + '/album/' + settings.album + '?kind=photo&alt=json' + ((settings.authKey !== "") ? "&authkey=" + settings.authKey : "") + ((settings.keyword !== "") ? "&tag=" + settings.keyword : "");
                 show(true, '');
                 $.getJSON($u, 'callback=?', album);
             }
@@ -344,7 +339,7 @@
         }
         function getLatest() {
             show(true, '');
-            var $u = 'http://picasaweb.google.com/data/feed/api/user/' + settings.username + (settings.album !== "" ? '/album/' + settings.album : '') + '?kind=photo&max-results=' + settings.maxResults + '&alt=json&q=' + ((settings.authKey !== "") ? "&authkey=" + settings.authKey : "");
+            var $u = 'http://picasaweb.google.com/data/feed/api/user/' + settings.username + (settings.album !== "" ? '/album/' + settings.album : '') + '?kind=photo&max-results=' + settings.maxResults + '&alt=json&q=' + ((settings.authKey !== "") ? "&authkey=" + settings.authKey : "") + ((settings.keyword !== "") ? "&tag=" + settings.keyword : "");
             $.getJSON($u, 'callback=?', latest);
             return $self;
         }
@@ -362,31 +357,31 @@
     };
 
     $.fn.pwi.defaults = {
-        mode: 'albums',
-        username: '',
-        album: "",
-        authKey: "",
-        albums: [],
-        albumCrop: 1,
-        albumTitle: "",
+        mode: 'albums', //-- can be: album, albums, latest (keyword = obsolete but backwards compatible, now just fill in a keyword in the settings to enable keyword-photos)
+        username: '', //-- Must be explicitly set!!!
+        album: "", //-- For loading a single album
+        authKey: "", //-- for loading a single album that is private (use in 'album' mode only)
+        albums: [], //-- use to load specific albums only: ["MyAlbum", "TheSecondAlbumName", "OtherAlbum"]
+        albumCrop: 1, //-- crop thumbs on albumpage to have all albums in square thumbs (see albumThumbSize for supported sizes)
+        albumTitle: "", //-- overrule album title in 'album' mode
         albumThumbSize: 160, //-- specify thumbnail size of albumthumbs (default: 72, cropped not supported, supported cropped/uncropped: 32, 48, 64, 160 and uncropped only: 72, 144, 200, 288, 320, 400, 512, 576, 640, 720, 800) 
-        albumMaxResults: 999,
-        albumsPerPage: 999,
-        albumPage: 1,
-        albumTypes: "public",
-        page: 1,
-        photoSize: 800,
-        maxResults: 50,
-        showPager: 'bottom', //'top', 'bottom', 'both'
+        albumMaxResults: 999, //-- load only the first X albums
+        albumsPerPage: 999, //-- show X albums per page (activates paging on albums when this amount is less then the available albums)
+        albumPage: 1, //-- force load on specific album
+        albumTypes: "public", //-- load public albums, not used for now
+        page: 1, //-- initial page for an photo page
+        photoSize: 800, //-- size of large photo loaded in slimbox, fancybox or other
+        maxResults: 50, //-- photos per page
+        showPager: 'bottom', //'top', 'bottom', 'both' (for both albums and album paging)
         thumbSize: 72,  //-- specify thumbnail size of photos (default: 72, cropped not supported, supported cropped/uncropped: 32, 48, 64, 160 and uncropped only: 72, 144, 200, 288, 320, 400, 512, 576, 640, 720, 800) 
-        thumbCrop: 0,
+        thumbCrop: 0, //-- force crop on photo thumbnails (see thumbSize for supported sized)
         thumbCss: {
             'margin': '5px'
         },
-        onclickThumb: "",
-        onclickAlbumThumb: "",
-        popupExt: "",
-        showAlbumTitles: true,
+        onclickThumb: "", //-- overload the function when clicked on a photo thumbnail
+        onclickAlbumThumb: "", //-- overload the function when clicked on a album thumbnail
+        popupExt: "", //-- extend the photos by connecting them to for example Fancybox (see demos for example)
+        showAlbumTitles: true,  //--following settings should be self-explanatory
         showAlbumThumbs: true,
         showAlbumdate: true,
         showAlbumPhotoCount: true,
@@ -408,7 +403,7 @@
             prev: "Previous",
             next: "Next",
             devider: "|"
-        },
+        }, //-- translate if needed
         months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
         slimbox_config: {
             loop: false,
@@ -424,13 +419,13 @@
             closeKeys: [27, 88, 67, 70],
             prevKeys: [37, 80],
             nextKeys: [39, 83]
-        },
+        }, //-- overrule defaults is needed
         blockUIConfig: {
             message: "<div class='lbLoading pwi_loader'>loading...</div>",
             css: "pwi_loader"
-        },
-        albumstore: {},
-        photostore: {},
+        }, //-- overrule defaults if needed
+        albumstore: {}, //-- don't touch
+        photostore: {}, //-- don't touch
         token: ""
     };
 })(jQuery);
