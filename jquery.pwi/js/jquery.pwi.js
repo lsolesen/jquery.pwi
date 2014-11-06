@@ -539,7 +539,7 @@
                 albums(settings.albumstore);
             } else {
                 show(true, '');
-                var $u = 'http://picasaweb.google.com/data/feed/api/user/' + settings.username + '?kind=album&access=' + settings.albumTypes + '&alt=json&thumbsize=' + settings.albumThumbSize + ((settings.albumCrop == 1) ? "c" : "u");
+                var $u = '//picasaweb.google.com/data/feed/api/user/' + settings.username + '?kind=album&access=' + settings.albumTypes + '&alt=json&thumbsize=' + settings.albumThumbSize + ((settings.albumCrop == 1) ? "c" : "u");
                 $.getJSON($u, 'callback=?', albums);
             }
             return $self;
@@ -549,7 +549,7 @@
             if (settings.photostore[settings.album]) {
                 album(settings.photostore[settings.album]);
             } else {
-                var $u = 'http://picasaweb.google.com/data/feed/api/user/' + settings.username + ((settings.album !== "") ? '/album/' + settings.album : "") + '?kind=photo&alt=json' + ((settings.authKey !== "") ? "&authkey=" + settings.authKey : "") + ((settings.keyword !== "") ? "&tag=" + settings.keyword : "") + '&imgmax=d&thumbsize=' + settings.thumbSize + ((settings.thumbCrop == 1) ? "c" : "u") + "," + settings.photoSize;
+                var $u = '//picasaweb.google.com/data/feed/api/user/' + settings.username + ((settings.album !== "") ? '/album/' + settings.album : "") + '?kind=photo&alt=json' + ((settings.authKey !== "") ? "&authkey=" + settings.authKey : "") + ((settings.keyword !== "") ? "&tag=" + settings.keyword : "") + '&imgmax=d&thumbsize=' + settings.thumbSize + ((settings.thumbCrop == 1) ? "c" : "u") + "," + settings.photoSize;
                 show(true, '');
                 $.getJSON($u, 'callback=?', album);
             }
@@ -558,7 +558,7 @@
 
         function getLatest() {
             show(true, '');
-            var $u = 'http://picasaweb.google.com/data/feed/api/user/' + settings.username + (settings.album !== "" ? '/album/' + settings.album : '') + '?kind=photo&max-results=' + settings.maxResults + '&alt=json&q=' + ((settings.authKey !== "") ? "&authkey=" + settings.authKey : "") + ((settings.keyword !== "") ? "&tag=" + settings.keyword : "") + '&imgmax=d&thumbsize=' + settings.thumbSize + ((settings.thumbCrop == 1) ? "c" : "u") + "," + settings.photoSize;
+            var $u = '//picasaweb.google.com/data/feed/api/user/' + settings.username + (settings.album !== "" ? '/album/' + settings.album : '') + '?kind=photo&max-results=' + settings.maxResults + '&alt=json&q=' + ((settings.authKey !== "") ? "&authkey=" + settings.authKey : "") + ((settings.keyword !== "") ? "&tag=" + settings.keyword : "") + '&imgmax=d&thumbsize=' + settings.thumbSize + ((settings.thumbCrop == 1) ? "c" : "u") + "," + settings.photoSize;
             $.getJSON($u, 'callback=?', latest);
             return $self;
         }
@@ -688,4 +688,3 @@ function formatTitle(title, currentArray, currentIndex, currentOpts) {
     }
     return newTitle;
 }
-
